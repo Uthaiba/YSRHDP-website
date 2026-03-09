@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Contact - YSRHDP</title>
+<link rel="stylesheet" href="style.css">
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+</head>
+
+<body>
+
+<header>
+    <h1>Yobe State Rural Healthcare Development Program</h1>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="programs.html">Programs</a>
+        <a href="contact.html">Contact</a>
+    </nav>
+</header>
+
+<section>
+    <h2>Contact / Register</h2>
+    <form id="contactForm">
+        <input type="text" id="name" placeholder="Your Name" required><br>
+        <input type="email" id="email" placeholder="Your Email" required><br>
+        <input type="tel" id="phone" placeholder="Phone Number" required><br>
+        <button type="submit">Submit</button>
+    </form>
+    <p id="status"></p>
+</section>
+
+<footer>
+    &copy; 2026 YSRHDP. All rights reserved.
+</footer>
+
+<script>
+  // Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyCHST0ut6hypyrADbzFiuT1KZSxq5wVSZM",
+    authDomain: "ysrhdp-5e3e5.firebaseapp.com",
+    databaseURL: "https://ysrhdp-5e3e5-default-rtdb.firebaseio.com",
+    projectId: "ysrhdp-5e3e5",
+    storageBucket: "ysrhdp-5e3e5.appspot.com",
+    messagingSenderId: "862466715053",
+    appId: "1:862466715053:web:9d0d717c18b9fce4b48524",
+    measurementId: "G-6MT494BSMD"
+  };
+
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  const database = firebase.database();
+
+  // Form submission
+  const form = document.getElementById("contactForm");
+  form.addEventListener("submit", function(e){
+      e.preventDefault();
+
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("email").value;
+      const phone = document.getElementById("phone").value;
+
+      const newUser = database.ref('registrations').push();
+      newUser.set({
+          name: name,
+          email: email,
+          phone: phone
+      }, function(error){
+          if(error){
+              document.getElementById("status").innerText = "Error! Please try again.";
+          } else {
+              document.getElementById("status").innerText = "Registration successful!";
+              form.reset();
+          }
+      });
+  });
+</script>
+
+</body>
+</html>

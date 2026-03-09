@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>YSRHDP - Register</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+</head>
+<body>
+
+<header>
+    <h1>YSRHDP Registration</h1>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="login.html">Login</a>
+        <a href="register.html">Register</a>
+    </nav>
+</header>
+
+<section>
+    <h2>Create an Account</h2>
+    <form id="registerForm">
+        <input type="text" id="name" placeholder="Full Name" required><br>
+        <input type="email" id="email" placeholder="Email" required><br>
+        <input type="password" id="password" placeholder="Password" required><br>
+        <button type="submit">Register</button>
+    </form>
+    <p id="status"></p>
+</section>
+
+<footer>
+    &copy; 2026 YSRHDP. All rights reserved.
+</footer>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyCHST0ut6hypyrADbzFiuT1KZSxq5wVSZM",
+    authDomain: "ysrhdp-5e3e5.firebaseapp.com",
+    projectId: "ysrhdp-5e3e5",
+    storageBucket: "ysrhdp-5e3e5.appspot.com",
+    messagingSenderId: "862466715053",
+    appId: "1:862466715053:web:9d0d717c18b9fce4b48524",
+    measurementId: "G-6MT494BSMD"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+
+  const form = document.getElementById("registerForm");
+
+  form.addEventListener("submit", function(e){
+      e.preventDefault();
+
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      auth.createUserWithEmailAndPassword(email, password)
+      .then((userCredential) => {
+          const user = userCredential.user;
+
+          // Save full name
+          user.updateProfile({ displayName: name }).then(() => {
+
+              // Send email verification
+              user.sendEmailVerification().then(() => {
+                  document.getElementById("status").innerHTML = `
+                      Registration successful!<br>
+                      A verification email has been sent to <strong>${email}</strong>.<br>
+                      Please check your inbox and verify your email before logging in.
+                  `;
+                  form.reset();
+
+                  // Optional: redirect to login after delay
+                  setTimeout(() => {
+                      window.location.replace("login.html");
+                  }, 4000);
+              }).catch((error) => {
+                  document.getElementById("status").innerText = error.message;
+              });
+
+          }).catch((error) => {
+              document.getElementById("status").innerText = error.message;
+          });
+
+      })
+      .catch((error) => {
+          document.getElementById("status").innerText = error.message;
+      });
+  });
+</script>
+
+</body>
+</html>

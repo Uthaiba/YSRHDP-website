@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>YSRHDP - Login</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+</head>
+<body>
+
+<header>
+    <h1>YSRHDP Login</h1>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="register.html">Register</a>
+        <a href="login.html">Login</a>
+    </nav>
+</header>
+
+<section>
+    <h2>Login to Your Account</h2>
+    <form id="loginForm">
+        <input type="email" id="email" placeholder="Email" required><br>
+        <input type="password" id="password" placeholder="Password" required><br>
+        <button type="submit">Login</button>
+    </form>
+    <p><a href="#" id="forgotPassword">Forgot Password?</a></p>
+    <p id="status"></p>
+</section>
+
+<footer>
+    &copy; 2026 YSRHDP. All rights reserved.
+</footer>
+
+<script>
+const firebaseConfig = {
+    apiKey: "AIzaSyCHST0ut6hypyrADbzFiuT1KZSxq5wVSZM",
+    authDomain: "ysrhdp-5e3e5.firebaseapp.com",
+    projectId: "ysrhdp-5e3e5",
+    storageBucket: "ysrhdp-5e3e5.appspot.com",
+    messagingSenderId: "862466715053",
+    appId: "1:862466715053:web:9d0d717c18b9fce4b48524",
+    measurementId: "G-6MT494BSMD"
+};
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+
+const form = document.getElementById("loginForm");
+
+form.addEventListener("submit", function(e){
+    e.preventDefault();
+
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    auth.signInWithEmailAndPassword(email, password)
+    .then((userCredential) => {
+        const user = userCredential.user;
+
+        if(user.emailVerified){
+            document.getElementById("status").innerText = "Login successful! Redirecting...";
+            setTimeout(() => {
+                window.location.replace("dashboard.html");
+            }, 500);
+        } else {
+            auth.signOut();
+            document.getElementById("status").innerHTML = `
+                Please verify your email before logging in.<br>
+                Check your inbox for the verification link.
+            `;
+        }
+    }).catch((error) => {
+        document.getElementById("status").innerText = error.message;
+    });
+});
+
+// Forgot password
+document.getElementById("forgotPassword").addEventListener("click", function(){
+    const email = prompt("Please enter your registered email address:");
+    if(email){
+        auth.sendPasswordResetEmail(email)
+        .then(() => {
+            alert("Password reset email sent! Check your inbox.");
+        })
+        .catch((error) => {
+            alert(error.message);
+        });
+    }
+});
+</script>
+
+</body>
+</html>

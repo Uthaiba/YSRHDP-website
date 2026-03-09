@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>YSRHDP Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+</head>
+<body>
+
+<header>
+    <h1>YSRHDP Dashboard</h1>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="programs.html">Programs</a>
+        <a href="#" id="logoutBtn">Logout</a>
+    </nav>
+</header>
+
+<section>
+    <h2>Welcome, <span id="userName"></span>!</h2>
+    <p>You are now logged in with email: <span id="userEmail"></span></p>
+    <p>Here you can access programs, updates, and other resources.</p>
+</section>
+
+<footer>
+    &copy; 2026 YSRHDP. All rights reserved.
+</footer>
+
+<script>
+  // Firebase config
+  const firebaseConfig = {
+    apiKey: "AIzaSyCHST0ut6hypyrADbzFiuT1KZSxq5wVSZM",
+    authDomain: "ysrhdp-5e3e5.firebaseapp.com",
+    projectId: "ysrhdp-5e3e5",
+    storageBucket: "ysrhdp-5e3e5.appspot.com",
+    messagingSenderId: "862466715053",
+    appId: "1:862466715053:web:9d0d717c18b9fce4b48524",
+    measurementId: "G-6MT494BSMD"
+  };
+
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+
+  // Display logged-in user info
+  auth.onAuthStateChanged(user => {
+      if(user){
+          document.getElementById("userName").innerText = user.displayName || "YSRHDP Member";
+          document.getElementById("userEmail").innerText = user.email;
+      } else {
+          // Redirect to login if not logged in
+          window.location.href = "login.html";
+      }
+  });
+
+  // Logout functionality
+  document.getElementById("logoutBtn").addEventListener("click", () => {
+      auth.signOut().then(() => {
+          window.location.href = "login.html";
+      }).catch(error => {
+          alert("Error logging out: " + error.message);
+      });
+  });
+</script>
+
+</body>
+</html>
