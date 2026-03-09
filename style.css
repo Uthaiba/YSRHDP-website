@@ -104,3 +104,24 @@ a#forgotPassword {
     text-decoration: underline;
     cursor: pointer;
 }
+.gallery{
+display:flex;
+flex-wrap:wrap;
+gap:20px;
+justify-content:center;
+padding:20px;
+}
+
+.gallery-card{
+width:250px;
+text-align:center;
+background:white;
+padding:10px;
+border-radius:10px;
+box-shadow:0 2px 8px rgba(0,0,0,0.2);
+}
+
+.gallery-card img{
+width:100%;
+border-radius:10px;
+}
